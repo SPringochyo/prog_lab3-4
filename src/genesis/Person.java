@@ -1,16 +1,19 @@
 package genesis;
 
+import javax.swing.*;
 import java.util.Objects;
+import java.util.Random;
 
 public abstract class Person {
 
     private final String name;
     private Condition condition;
+    private Context context;
 
 
     public Person(String name) {
         this.name = name;
-        this.setCondition(Condition.DEFAULT);
+        this.setRandomCondition();
     }
 
 
@@ -96,20 +99,43 @@ public abstract class Person {
 
 
     public enum Condition {
-        DEFAULT("В норме"),
-        SCARED("Напуган"),
-        NOT_HAPPY("Не в восторге");
+        DEFAULT("В норме", 0),
+        SCARED("Напуган", 1),
+        NOT_HAPPY("Не в восторге", 2);
 
         private final String description;
+        private final int id;
+
 
         public String getDescription() {
             return description;
         }
 
 
-        Condition(String description) {
-            this.description = description;
+        public int getId() {
+            return id;
         }
+
+
+        Condition(String description, int id) {
+            this.description = description;
+            this.id = id;
+        }
+    }
+
+
+    public enum Context {
+        SHINY_NOSE, NOT_HAPPY
+    }
+
+
+    public void setContext(Context newContext) {
+        this.context = newContext;
+    }
+
+
+    public Context getContext() {
+        return this.context;
     }
 
 
@@ -118,8 +144,20 @@ public abstract class Person {
     }
 
 
+    public void setRandomCondition() {
+        final Random random = new Random();
+        Condition[] conditions = Condition.values();
+        this.condition = conditions[random.nextInt(conditions.length)];
+    }
+
+
     public void describeCondition() {
         System.out.println(this.name + " " + this.condition.getDescription());
+    }
+
+
+    public boolean contextIs(Context context) {
+        return this.context == context;
     }
 
 

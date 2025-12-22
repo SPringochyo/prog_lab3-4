@@ -4,8 +4,15 @@ import genesis.Event;
 
 public class Rain implements Event {
 
-    private String name = "Дождь";
+    private final String name = "Дождь";
     private boolean rain = false;
+
+
+    public void randomRain(double chance) {
+        if (chance < 0.5 && !this.isRain()) {this.startEvent();}
+        else if (chance < 0.5 && this.isRain()) {this.endEvent();}
+    }
+
 
     @Override
     public void startEvent() {
